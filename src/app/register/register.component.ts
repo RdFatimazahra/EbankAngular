@@ -9,7 +9,7 @@ import { JwtService } from '../service/jwt.service';
 })
 export class RegisterComponent implements OnInit{
 
-  registerForm!: FormGroup;
+  registerForm!: FormGroup
 
   constructor(
     private service: JwtService,
@@ -19,7 +19,7 @@ export class RegisterComponent implements OnInit{
   ngOnInit(): void {
 this.registerForm = this.fb.group ({
    name: ['', [Validators.required]],
-   emial: ['', [Validators.required, Validators.email]],
+   email: ['', [Validators.required , Validators.email]],
    password: ['', [Validators.required]],
    confirmPassword: ['', [Validators.required]],
 
@@ -30,15 +30,23 @@ this.registerForm = this.fb.group ({
     const confirmPassword = formGroup.get('confirmPassword')?.value;
 
     if(password != confirmPassword) {
-      formGroup.get('confirmPassword')?.setErrors({passwordMismatch : true})
+      formGroup.get('confirmPassword')?.setErrors({passwordMismatch : true});
     } else {
-      formGroup.get('confirmPassword')?.setErrors(null)
+      formGroup.get('confirmPassword')?.setErrors(null);
     }
 
 
   }
   submitForm(){
-    console.log(this.registerForm?.value);
+    console.log(this.registerForm.value);
+    this.service.register(this.registerForm.value).subscribe(
+      (response) => {
+        if (response.id != null) {
+          alert("Hello" + response.name);
+        }
+      }
+    )
+   
   }
 
 }
