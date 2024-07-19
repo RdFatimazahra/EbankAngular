@@ -41,9 +41,10 @@ this.registerForm = this.fb.group ({
     console.log(this.registerForm.value);
     this.service.register(this.registerForm.value).subscribe(
       (response) => {
-        if (response.id != null) {
-          alert("Hello" + response.name);
-        }
+        console.log(response)
+        // if (response.id != null) {
+        //   alert("Hello" + response.name);
+        // }
       }
     )
    

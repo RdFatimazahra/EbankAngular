@@ -1,6 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Jwt } from '../model/jwt';
 
 
 const BASE_URL  = ["http://localhost:8081/api/v1/auth/"]
@@ -11,13 +12,54 @@ export class JwtService {
 
   constructor( private http : HttpClient) { }
 
-  register(signRequest:any): Observable<any>{
-    return this.http.post(BASE_URL+'register', signRequest)
+  register(signRequest:any): Observable<Jwt>{
+    return this.http.post<Jwt>(BASE_URL+'register', signRequest)
 
   }
 
-  login(loginRequest:any): Observable<any>{
-    return this.http.post(BASE_URL+'login', signRequest)
+  login(loginRequest:any): Observable<Jwt>{
+    return this.http.post<Jwt>(BASE_URL+'authenticate', loginRequest)
 
+  }
+
+  // demo(): Observable<any>{
+  //   return this.http.get(BASE_URL+'api/v1/demo-controller/demo',{
+  //     header: this.createAuthorizationHeader()
+  //   })
+   
+
+  // }
+  // private createAuthorizationHeader(){
+  //   const jwToken = localStorage.getItem('jwt');
+  //   if(jwToken){
+  //     console.log("JWT token found in local storage", jwToken);
+  //     return new HttpHeaders().set(
+  //       "Authorization", "Bearer " + jwToken
+
+  //     )
+
+  //   }else {
+  //     console.log("JWT token not found in local storage", jwToken);
+
+  //   }
+  //   return null;
+      
+  // }
+
+
+  demo(): Observable<any> {
+    const headers = this.createAuthorizationHeader();
+    return this.http.get(BASE_URL + 'demo', { headers });
+  }
+
+  private createAuthorizationHeader(): HttpHeaders | undefined {
+    const jwtToken = localStorage.getItem('jwt');
+    if (jwtToken) {
+      console.log("JWT token found in local storage", jwtToken);
+      return new HttpHeaders().set("Authorization", "Bearer " + jwtToken);
+    } else {
+      console.log("JWT token not found in local storage");
+      return undefined;
+    }
   }
 }
