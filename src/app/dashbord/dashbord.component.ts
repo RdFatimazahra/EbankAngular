@@ -7,6 +7,10 @@ import { JwtService } from '../service/jwt.service';
   styleUrls: ['./dashbord.component.css']
 })
 export class DashbordComponent {
+
+  message!: string ;
+
+
   constructor(
     private service:JwtService
   ){ }
@@ -18,6 +22,7 @@ export class DashbordComponent {
     this.service.demo().subscribe(
       (response) => {
         console.log(response);
+        this.message = response.message;
       }
     )
   }
